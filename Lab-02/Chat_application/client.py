@@ -1,0 +1,38 @@
+# program to create an application for chat using TCP.
+# importing time and socket library
+import time, socket
+print("\nWelcome to Chat Room\n")
+print("Initialising....\n")
+time.sleep(1)
+# create a socket object 
+s = socket.socket()
+# get local machine name
+shost = socket.gethostname()
+ip = socket.gethostbyname(shost)
+print(shost, "(", ip, ")\n")
+#getting host info
+host = input(str("Enter server address: "))
+name = input(str("\nEnter your name: "))
+port = 1234
+print("\nTrying to connect to ", host, "(", port, ")\n")
+time.sleep(1)
+# connecting to the host 
+s.connect((host, port))
+print("Connected...\n")
+#sending name to host 
+s.send(name.encode())
+# Receive no more than 1024 bytes
+s_name = s.recv(1024)
+s_name = s_name.decode()
+print(s_name, "has joined the chat room\nEnter [e] to exit chat room\n")
+while True:
+  message = s.recv(1024)
+  message = message.decode()
+  print(s_name, ":", message)
+  message = input(str("Me : "))
+  if message == "[e]":
+    message = "Left chat room!"
+    s.send(message.encode())
+    print("\n")
+    break
+  s.send(message.encode())
